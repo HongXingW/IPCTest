@@ -3,10 +3,15 @@ package com.example.whx.ipctest.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
- * Created by Zhiquan on 2016/7/15.
+ *
+ * Created by whx on 2016/7/15.
  */
-public class User implements Parcelable{
+public class User implements Parcelable , Serializable{//若想被序列化到文件中必须实现serializable接口
+
+    private static final long serialVersionUID = 1L;
 
     private int userId;
     private String userName;
@@ -21,6 +26,7 @@ public class User implements Parcelable{
         this.userId = userId;
         this.userName = userName;
         this.isMale = isMale;
+        this.book = null;
     }
 
     private User(Parcel in){

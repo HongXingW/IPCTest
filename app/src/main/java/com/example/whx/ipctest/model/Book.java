@@ -3,10 +3,14 @@ package com.example.whx.ipctest.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Created by whx on 2016/7/15.
  */
-public class Book implements Parcelable{
+public class Book implements Parcelable , Serializable{
+
+    private static final long serialVersionUID = 1L;
 
     public int bookId;
     public String bookName;
@@ -44,4 +48,9 @@ public class Book implements Parcelable{
             return new Book[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "bookId = "+bookId+" bookName = "+bookName;
+    }
 }

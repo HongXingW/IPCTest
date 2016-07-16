@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.whx.ipctest.model.Book;
 import com.example.whx.ipctest.model.User;
 import com.example.whx.ipctest.utils.MyConstants;
 import com.example.whx.ipctest.utils.MyUtil;
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 User user = new User(1,"hello",false);
+                user.setBook(new Book(1,"Java"));
+
                 File dir = new File(MyConstants.PRIMARY_PATH);
 
                 if(!dir.exists()){
@@ -57,12 +60,14 @@ public class MainActivity extends AppCompatActivity {
                 ObjectOutputStream objectOutputStream = null;
 
                 try{
+
                     objectOutputStream = new ObjectOutputStream(new FileOutputStream(cachedFile));
                     objectOutputStream.writeObject(user);
 
                     Log.e(TAG,"persist user = "+user);
                 }catch (IOException e){
-                    Log.e(TAG,e.getMessage());
+                    e.printStackTrace();
+                    Log.e(TAG,e.toString());
                 }finally {
 
                     MyUtil.close(objectOutputStream);
