@@ -36,6 +36,11 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <service android:name=".message.MessengerService"
+            android:process=":remote">
+
+        </service>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,6 +56,8 @@
             android:process="com.example.whx.ipctest.remote">
 
         </activity>
+        <activity android:name=".message.MessengerActivity"/>
+
     </application>
 
 </manifest>

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.whx.ipctest.message.MessengerActivity;
 import com.example.whx.ipctest.model.Book;
 import com.example.whx.ipctest.model.User;
 import com.example.whx.ipctest.utils.MyConstants;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     Button toSecond;
+    Button toMessenger;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +37,21 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        toMessenger = (Button)findViewById(R.id.to_messenger);
+        toMessenger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MessengerActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        persistToFile();
+        //persistToFile();
     }
 
     private void persistToFile(){
