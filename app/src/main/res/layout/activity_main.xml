@@ -19,4 +19,9 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:text="to_messenger"/>
+   <Button
+       android:id="@+id/to_book_manager"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="to_book_manager"/>
 </LinearLayout>

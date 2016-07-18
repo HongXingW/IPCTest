@@ -1,4 +1,4 @@
-package com.example.whx.ipctest.model;
+package com.example.whx.ipctest.aidl;
 
 import android.os.Parcel;
 import android.os.Parcelable;

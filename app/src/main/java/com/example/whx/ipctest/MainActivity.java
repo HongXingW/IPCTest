@@ -7,8 +7,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.whx.ipctest.aidl.BookManagerActivity;
 import com.example.whx.ipctest.message.MessengerActivity;
-import com.example.whx.ipctest.model.Book;
+import com.example.whx.ipctest.aidl.Book;
 import com.example.whx.ipctest.model.User;
 import com.example.whx.ipctest.utils.MyConstants;
 import com.example.whx.ipctest.utils.MyUtil;
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     Button toSecond;
-    Button toMessenger;
+    Button toMessenger,toBookManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MessengerActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        toBookManager = (Button)findViewById(R.id.to_book_manager);
+        toBookManager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, BookManagerActivity.class);
                 startActivity(intent);
             }
         });
