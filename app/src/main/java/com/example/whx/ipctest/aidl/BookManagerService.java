@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -23,7 +24,9 @@ public class BookManagerService extends Service{
 
     private CopyOnWriteArrayList<Book> mBookList = new CopyOnWriteArrayList<>();
 
-    private CopyOnWriteArrayList<IOnNewBookArrivedListener> mListenerList = new CopyOnWriteArrayList<>();
+    //private CopyOnWriteArrayList<IOnNewBookArrivedListener> mListenerList = new CopyOnWriteArrayList<>();
+
+    private RemoteCallbackList<IOnNewBookArrivedListener> mListenerList = new RemoteCallbackList<>();
 
     private Binder mBinder = new IBookManager.Stub(){
 
@@ -40,25 +43,33 @@ public class BookManagerService extends Service{
         @Override
         public void registerListener(IOnNewBookArrivedListener listener) throws RemoteException {
 
-            if(!mListenerList.contains(listener)){
-                mListenerList.add(listener);
-            }else {
-                Log.e(TAG,"listener has already registered");
-            }
+//            if(!mListenerList.contains(listener)){
+//                mListenerList.add(listener);
+//            }else {
+//                Log.e(TAG,"listener has already registered");
+//            }
 
-            Log.e(TAG,"listener list size: "+mListenerList.size());
+            mListenerList.register(listener);
+
+            int N = mListenerList.beginBroadcast();
+            Log.e(TAG,"listener list size: "+N);
+            mListenerList.finishBroadcast();
         }
 
         @Override
         public void unregisterListener(IOnNewBookArrivedListener listener) throws RemoteException {
 
-            if (mListenerList.contains(listener)){
-                mListenerList.remove(listener);
-            }else{
-                Log.e(TAG,"not found the listener");
-            }
+//            if (mListenerList.contains(listener)){
+//                mListenerList.remove(listener);
+//            }else{
+//                Log.e(TAG,"not found the listener");
+//            }
 
-            Log.e(TAG,"listener list size: "+mListenerList.size());
+            mListenerList.unregister(listener);
+
+            int N = mListenerList.beginBroadcast();
+            Log.e(TAG,"listener list size: "+N);
+            mListenerList.finishBroadcast();
         }
     };
 
@@ -86,13 +97,26 @@ public class BookManagerService extends Service{
 
     private void onNewBookArrived(Book book) throws RemoteException{
         mBookList.add(book);
-        Log.e(TAG,"onNewBookArrived, notify "+mListenerList.size()+" listeners");
+        //Log.e(TAG,"onNewBookArrived, notify "+mListenerList.size()+" listeners");
+
+        int N = mListenerList.beginBroadcast();
 
         //通知每一个注册监听的用户
-        for(IOnNewBookArrivedListener listener : mListenerList){
-            Log.e(TAG,"notify listener: "+listener);
-            listener.onNewBookArrived(book);
+        for(int i =0;i<N;i++){
+            IOnNewBookArrivedListener listener = mListenerList.getBroadcastItem(i);
+
+            if(listener != null){
+
+                try {
+                    Log.e(TAG,"notify listener: "+listener);
+                    listener.onNewBookArrived(book);
+                }catch (Exception e){
+                    Log.e(TAG,e.toString());
+                }
+            }
+
         }
+        mListenerList.finishBroadcast();
     }
 
     //每隔一段时间添加一本书
@@ -100,7 +124,7 @@ public class BookManagerService extends Service{
 
         @Override
         public void run() {
-            while (!mIsServiceDestroyed.get()){
+            while (!mIsServiceDestroyed.get() && mBookList.size()<10){
                 try{
                     Thread.sleep(3000);
                 } catch (InterruptedException e){

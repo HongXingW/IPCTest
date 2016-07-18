@@ -11,6 +11,9 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.whx.ipctest.R;
 
@@ -23,6 +26,9 @@ public class BookManagerActivity extends AppCompatActivity{
 
     private static final String TAG = "BMActivity";
     private static final int MESSAGE_NEW_BOOK_ARRIVED = 1;
+
+    private TextView textView;
+    private Button button;
 
     private IBookManager manager;
 
@@ -46,6 +52,11 @@ public class BookManagerActivity extends AppCompatActivity{
         public void onServiceConnected(ComponentName name, IBinder service) {
 
             IBookManager bookManager = IBookManager.Stub.asInterface(service);
+            try {
+                service.linkToDeath(mDeathRecipient, 0);
+            }catch (RemoteException e){
+                Log.e(TAG,e.toString());
+            }
 
             manager = bookManager;
             try{
@@ -71,6 +82,23 @@ public class BookManagerActivity extends AppCompatActivity{
             Log.e(TAG,"binder died");
         }
     };
+
+    private IBinder.DeathRecipient mDeathRecipient = new IBinder.DeathRecipient() {
+        @Override
+        public void binderDied() {
+
+            if(manager == null){
+                return;
+            }
+            manager.asBinder().unlinkToDeath(mDeathRecipient,0);
+            manager = null;
+
+            //重新绑定远程Service
+            Intent intent = new Intent(BookManagerActivity.this,BookManagerService.class);
+            bindService(intent,connection,BIND_AUTO_CREATE);
+        }
+    };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +108,21 @@ public class BookManagerActivity extends AppCompatActivity{
         Intent intent = new Intent(this,BookManagerService.class);
         bindService(intent,connection,BIND_AUTO_CREATE);
 
+        textView = (TextView)findViewById(R.id.book_text);
+        button = (Button)findViewById(R.id.get_list);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    String s = manager.getBookList().toString();
+
+                    textView.setText(s);
+                }catch (RemoteException e){
+                    Log.e(TAG,e.toString());
+                }
+
+            }
+        });
     }
 
     @Override
