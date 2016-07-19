@@ -2,6 +2,7 @@ package com.example.whx.ipctest.aidl;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
@@ -92,6 +93,14 @@ public class BookManagerService extends Service{
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+
+        //验证权限
+        int check = checkCallingOrSelfPermission("com.example.whx.ipctest.permission.ACCESS_BOOK_SERVICE");
+
+        if(check == PackageManager.PERMISSION_DENIED){
+            return null;
+        }
+
         return mBinder;
     }
 
