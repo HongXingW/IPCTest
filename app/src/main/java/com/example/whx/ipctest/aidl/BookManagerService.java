@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.Parcel;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
@@ -71,6 +72,29 @@ public class BookManagerService extends Service{
             int N = mListenerList.beginBroadcast();
             Log.e(TAG,"listener list size: "+N);
             mListenerList.finishBroadcast();
+        }
+
+        @Override
+        public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
+
+            //验证权限
+            int check = checkCallingOrSelfPermission("com.example.whx.ipctest.permission.ACCESS_BOOK_SERVICE");
+
+            if(check == PackageManager.PERMISSION_DENIED){
+                return false;
+            }
+
+            String packageName = null;
+            String[] packages = getPackageManager().getPackagesForUid(getCallingUid());
+
+            if(packages != null && packages.length > 0){
+                packageName = packages[0];
+            }
+
+            if(!packageName.startsWith("com.example")){
+                return false;
+            }
+            return super.onTransact(code, data, reply, flags);
         }
     };
 
