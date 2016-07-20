@@ -11,6 +11,7 @@ import com.example.whx.ipctest.aidl.BookManagerActivity;
 import com.example.whx.ipctest.message.MessengerActivity;
 import com.example.whx.ipctest.aidl.Book;
 import com.example.whx.ipctest.model.User;
+import com.example.whx.ipctest.provider.ProviderActivity;
 import com.example.whx.ipctest.utils.MyConstants;
 import com.example.whx.ipctest.utils.MyUtil;
 
@@ -22,8 +23,8 @@ import java.io.ObjectOutputStream;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    Button toSecond;
-    Button toMessenger,toBookManager;
+
+    Button toSecond,toMessenger,toBookManager,toProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, BookManagerActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        toProvider = (Button)findViewById(R.id.to_provider);
+        toProvider.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ProviderActivity.class);
                 startActivity(intent);
             }
         });
