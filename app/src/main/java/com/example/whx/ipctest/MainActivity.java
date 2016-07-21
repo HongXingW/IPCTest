@@ -12,6 +12,7 @@ import com.example.whx.ipctest.message.MessengerActivity;
 import com.example.whx.ipctest.aidl.Book;
 import com.example.whx.ipctest.model.User;
 import com.example.whx.ipctest.provider.ProviderActivity;
+import com.example.whx.ipctest.socket.TcpClientActivity;
 import com.example.whx.ipctest.utils.MyConstants;
 import com.example.whx.ipctest.utils.MyUtil;
 
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    Button toSecond,toMessenger,toBookManager,toProvider;
+    Button toSecond,toMessenger,toBookManager,toProvider,toSocket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ProviderActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        toSocket = (Button)findViewById(R.id.to_socket);
+        toSocket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, TcpClientActivity.class);
                 startActivity(intent);
             }
         });

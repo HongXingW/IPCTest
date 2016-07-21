@@ -26,4 +26,9 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:text="to_provider"/>
+   <Button
+       android:id="@+id/to_socket"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="to_socket"/>
 </LinearLayout>

@@ -45,4 +45,8 @@ public class MyUtil {
     public static void executeInThread(Runnable runnable){
         new Thread(runnable).start();
     }
+
+    public static boolean isEmpty(String string){
+        return string == null||string.equals("");
+    }
 }
