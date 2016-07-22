@@ -56,6 +56,10 @@
             android:process=":remote">
 
         </service>
+        <service android:name=".aidl.BinderPoolService"
+            android:process=":remote">
+
+        </service>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -78,7 +82,9 @@
 
         <activity android:name=".socket.TcpClientActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity android:name=".aidl.BinderPoolActivity">
 
+        </activity>
         <provider
             android:authorities="com.example.whx.ipctest.provider"
             android:name=".provider.BookProvider"

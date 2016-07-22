@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.whx.ipctest.aidl.BinderPoolActivity;
 import com.example.whx.ipctest.aidl.BookManagerActivity;
 import com.example.whx.ipctest.message.MessengerActivity;
 import com.example.whx.ipctest.aidl.Book;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    Button toSecond,toMessenger,toBookManager,toProvider,toSocket;
+    Button toSecond,toMessenger,toBookManager,toProvider,toSocket,toBinderPool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, TcpClientActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        toBinderPool = (Button)findViewById(R.id.to_binder_pool);
+        toBinderPool.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, BinderPoolActivity.class);
                 startActivity(intent);
             }
         });
